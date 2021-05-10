@@ -47,6 +47,26 @@ const start = () => {
     })
 }
 
+const addDepartment = () => {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "answer",
+            message: "Please enter the name of the department you wish to add:"
+        }
+    ]).then(({answer}) => {
+        const query = connection.query('INSERT INTO department SET ?',
+        {
+            department_name: answer,
+        },
+        (err, res) => {
+            if (err) throw err;
+            console.log(`${res.affectedRows} department inserted!\n`);
+        }
+        )
+    })
+}
+
 const viewDepartments = () => {
     connection.query('SELECT * FROM department', (err, res) => {
         if (err) throw err;
