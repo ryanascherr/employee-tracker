@@ -1,4 +1,4 @@
-- Drops the animals_db if it exists currently --
+-- Drops the employees_db if it exists currently --
 DROP DATABASE IF EXISTS employees_db;
 -- Creates the "animals_db" database --
 CREATE DATABASE employees_db;
