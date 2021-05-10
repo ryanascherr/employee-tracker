@@ -146,6 +146,7 @@ const viewDepartments = () => {
     connection.query('SELECT * FROM department', (err, res) => {
         if (err) throw err;
         console.table(res);
+        start();
     })
 }
 
@@ -153,6 +154,7 @@ const viewRoles = () => {
     connection.query('SELECT * FROM role', (err, res) => {
         if (err) throw err;
         console.table(res);
+        start();
     })
 }
 
@@ -160,17 +162,16 @@ const viewEmployees = () => {
     connection.query('SELECT * FROM employee', (err, res) => {
         if (err) throw err;
         console.table(res);
-        console.log(res);
+        start();
     })
 }
 
 const updateEmployeeRole = () => {
+    let arrayOfNames = [];
     connection.query('SELECT * FROM employee', (err, res) => {
         if (err) throw err;
-        let arrayOfNames = [];
         for (let i = 0; i < res.length; i++) {
             let fullName = res[i].first_name + " " + res[i].last_name;
-            console.log(fullName);
             arrayOfNames.push(fullName);
         }
         inquirer.prompt([
@@ -179,8 +180,33 @@ const updateEmployeeRole = () => {
                 type: "list",
                 message: "Which employee do you want to update?",
                 choices: arrayOfNames, 
-            }
-        ])
+            },
+        ]).then((answer) => {
+            testFunction(answer);
+        })
+    })
+}
+
+const testFunction = (name) => {
+    let arrayOfRoles = [];
+    console.log(name);
+    let firstName = name.split(" ");
+    connection.query('SELECT * FROM employee', (err, res) => {
+        if (err) throw err;
+        for (let i = 0; i < res.length; i++) {
+            let role = res[i].role_id;
+            arrayOfRoles.push(role);
+        }
+        inquirer.prompt([
+            {
+                name: "role",
+                type: "list",
+                message: `What is ${firstName[0]}'s new role?`,
+                choices: arrayOfRoles, 
+            },
+        ]).then((answer) => {
+            console.log("Hey!");
+        })
     })
 }
 
