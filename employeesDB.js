@@ -31,7 +31,7 @@ const start = () => {
             case "Add a role":
                 addRole();
                 break;
-            case "Add a employee":
+            case "Add an employee":
                 addEmployee();
                 break;
             case "View departments":
@@ -95,6 +95,46 @@ const addRole = () => {
         (err, res) => {
             if (err) throw err;
             console.log(`${res.affectedRows} role inserted!\n`);
+            start();
+        })
+    })
+}
+
+const addEmployee = () => {
+    inquirer.prompt([
+        {
+            name: "first_name",
+            type: "input",
+            message: "What is the first name of the employee?"
+        },
+        {
+            name: "last_name",
+            type: "input",
+            message: "What is the last name of the employee?"
+        },
+        {
+            name: "role_id",
+            type: "input",
+            message: "What is the role id of the employee?"
+        },
+        {
+            name: "manager_id",
+            type: "input",
+            message: "What is the manager id of the employee?"
+        }
+    ]).then((answer) => {
+        console.log(answer)
+        connection.query('INSERT INTO employee SET ?',
+        {
+            first_name: answer.first_name,
+            last_name: answer.last_name,
+            role_id: answer.role_id,
+            manager_id: answer.manager_id
+        },
+        (err, res) => {
+            if (err) throw err;
+            console.log(`${res.affectedRows} employee inserted!\n`);
+            start();
         })
     })
 }
