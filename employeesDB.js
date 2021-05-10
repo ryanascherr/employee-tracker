@@ -54,6 +54,20 @@ const viewDepartments = () => {
     })
 }
 
+const viewRoles = () => {
+    connection.query('SELECT * FROM role', (err, res) => {
+        if (err) throw err;
+        console.table(res);
+    })
+}
+
+const viewDepartments = () => {
+    connection.query('SELECT * FROM department', (err, res) => {
+        if (err) throw err;
+        console.table(res);
+    })
+}
+
 connection.connect((err) => {
     if (err) throw err;
     console.log(`connected as id ${connection.threadId}`);
