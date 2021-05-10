@@ -13,13 +13,22 @@ searchStuff = () => {
     ]).then(({answer}) => {
         switch(answer) {
             case "Add a department":
-                console.log("Success!");
+                addDepartment();
                 break;
             case "Add a role":
-                console.log("Success!");
+                addRole();
                 break;
             case "Add a employee":
-                console.log("Success!");
+                addEmployee();
+                break;
+            case "View departments":
+                viewDepartments();
+                break;
+            case "View roles":
+                viewRoles();
+                break;
+            case "View employees":
+                viewEmployees();
                 break;
         }
     })
