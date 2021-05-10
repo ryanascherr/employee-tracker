@@ -84,7 +84,8 @@ const addRole = () => {
             type: "input",
             message: "What is the department id of the role?"
         }
-    ]).then(({answer}) => {
+    ]).then((answer) => {
+        console.log(answer)
         connection.query('INSERT INTO role SET ?',
         {
             title: answer.title,
