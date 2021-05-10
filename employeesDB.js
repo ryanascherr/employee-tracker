@@ -21,7 +21,7 @@ const start = () => {
             type: "list",
             name: "answer",
             message: "How to you want to do?",
-            choices: ["Add a department", "Add a role", "Add an employee", "View departments", "View roles", "View employees"],
+            choices: ["Add a department", "Add a role", "Add an employee", "View departments", "View roles", "View employees", "Update employee roles"],
         }
     ]).then(({answer}) => {
         switch(answer) {
@@ -42,6 +42,9 @@ const start = () => {
                 break;
             case "View employees":
                 viewEmployees();
+                break;
+            case "Update employee roles":
+                updateEmployeeRole();
                 break;
         }
     })
@@ -157,6 +160,27 @@ const viewEmployees = () => {
     connection.query('SELECT * FROM employee', (err, res) => {
         if (err) throw err;
         console.table(res);
+        console.log(res);
+    })
+}
+
+const updateEmployeeRole = () => {
+    connection.query('SELECT * FROM employee', (err, res) => {
+        if (err) throw err;
+        let arrayOfNames = [];
+        for (let i = 0; i < res.length; i++) {
+            let fullName = res[i].first_name + " " + res[i].last_name;
+            console.log(fullName);
+            arrayOfNames.push(fullName);
+        }
+        inquirer.prompt([
+            {
+                name: "employee",
+                type: "list",
+                message: "Which employee do you want to update?",
+                choices: arrayOfNames, 
+            }
+        ])
     })
 }
 
