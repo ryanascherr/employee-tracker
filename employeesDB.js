@@ -62,8 +62,39 @@ const addDepartment = () => {
         (err, res) => {
             if (err) throw err;
             console.log(`${res.affectedRows} department inserted!\n`);
+            start();
+        })
+    })
+}
+
+const addRole = () => {
+    inquirer.prompt([
+        {
+            name: "title",
+            type: "input",
+            message: "What is the title of the role?"
+        },
+        {
+            name: "salary",
+            type: "input",
+            message: "What is the salary of the role?"
+        },
+        {
+            name: "department_id",
+            type: "input",
+            message: "What is the department id of the role?"
         }
-        )
+    ]).then(({answer}) => {
+        connection.query('INSERT INTO role SET ?',
+        {
+            title: answer.title,
+            salary: answer.salary,
+            department_id: answer.department_id
+        },
+        (err, res) => {
+            if (err) throw err;
+            console.log(`${res.affectedRows} role inserted!\n`);
+        })
     })
 }
 
