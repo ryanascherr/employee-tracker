@@ -192,9 +192,12 @@ const chooseEmployee = () => {
 
 const chooseRole = (name) => {
     let arrayOfRoles = [];
-    console.log(name);
-    console.log(employeeID);
-    // let firstName = name.split(" ");
+    name = JSON.stringify(name);
+    let test = name.split(':');
+    test = test[1];
+    test = test.slice(0, -2).slice(1).split(" ");
+    let firstName = test[0];
+    let lastName = test[1];
     connection.query('SELECT * FROM role', (err, res) => {
         if (err) throw err;
         for (let i = 0; i < res.length; i++) {
@@ -205,18 +208,33 @@ const chooseRole = (name) => {
             {
                 name: "role",
                 type: "list",
-                message: `What is their new role?`,
+                message: `What is ${firstName}'s new role?`,
                 choices: arrayOfRoles, 
             },
         ]).then((answer) => {
-            console.log("Hey!");
-            updateEmployee();
+            updateEmployee(answer, firstName, lastName);
         })
     })
 }
 
-const updateEmployee = () => {
-    
+const updateEmployee = (role, firstName, lastName) => {
+    console.log(firstName);
+    console.log(lastName);
+    connection.query('UPDATE employee SET ? WHERE ?'),
+    [
+        {
+            role_id: 7,
+        },
+        {
+            last_name: lastName,
+        },
+    ],
+    (err, res) => {
+        if (err) throw err;
+        console.log(`${res.affectedRows} employee updated!\n`);
+        start();
+      }
+  
 }
 
 connection.connect((err) => {
