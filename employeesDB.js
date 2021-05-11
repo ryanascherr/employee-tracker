@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const inquirer = require("inquirer");
+let employeeID;
 
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -44,7 +45,7 @@ const start = () => {
                 viewEmployees();
                 break;
             case "Update employee roles":
-                updateEmployeeRole();
+                chooseEmployee();
                 break;
         }
     })
@@ -166,13 +167,15 @@ const viewEmployees = () => {
     })
 }
 
-const updateEmployeeRole = () => {
+const chooseEmployee = () => {
     let arrayOfNames = [];
     connection.query('SELECT * FROM employee', (err, res) => {
         if (err) throw err;
         for (let i = 0; i < res.length; i++) {
             let fullName = res[i].first_name + " " + res[i].last_name;
             arrayOfNames.push(fullName);
+            employeeID = res[i].id;
+            console.log(employeeID);
         }
         inquirer.prompt([
             {
@@ -182,32 +185,38 @@ const updateEmployeeRole = () => {
                 choices: arrayOfNames, 
             },
         ]).then((answer) => {
-            testFunction(answer);
+            chooseRole(answer);
         })
     })
 }
 
-const testFunction = (name) => {
+const chooseRole = (name) => {
     let arrayOfRoles = [];
     console.log(name);
-    let firstName = name.split(" ");
-    connection.query('SELECT * FROM employee', (err, res) => {
+    console.log(employeeID);
+    // let firstName = name.split(" ");
+    connection.query('SELECT * FROM role', (err, res) => {
         if (err) throw err;
         for (let i = 0; i < res.length; i++) {
-            let role = res[i].role_id;
+            let role = res[i].title;
             arrayOfRoles.push(role);
         }
         inquirer.prompt([
             {
                 name: "role",
                 type: "list",
-                message: `What is ${firstName[0]}'s new role?`,
+                message: `What is their new role?`,
                 choices: arrayOfRoles, 
             },
         ]).then((answer) => {
             console.log("Hey!");
+            updateEmployee();
         })
     })
+}
+
+const updateEmployee = () => {
+    
 }
 
 connection.connect((err) => {
