@@ -193,11 +193,11 @@ const chooseEmployee = () => {
 const chooseRole = (name) => {
     let arrayOfRoles = [];
     name = JSON.stringify(name);
-    let test = name.split(':');
-    test = test[1];
-    test = test.slice(0, -2).slice(1).split(" ");
-    let firstName = test[0];
-    let lastName = test[1];
+    name = name.split(':');
+    name = name[1];
+    name = name.slice(0, -2).slice(1).split(" ");
+    let firstName = name[0];
+    let lastName = name[1];
     connection.query('SELECT * FROM role', (err, res) => {
         if (err) throw err;
         for (let i = 0; i < res.length; i++) {
@@ -218,23 +218,48 @@ const chooseRole = (name) => {
 }
 
 const updateEmployee = (role, firstName, lastName) => {
-    console.log(firstName);
-    console.log(lastName);
-    connection.query('UPDATE employee SET ? WHERE ?'),
+    role = JSON.stringify(role);
+    console.log(role);
+    role = role.split(':');
+    console.log(role);
+    role = role[1];
+    console.log(role);
+    role = role.slice(0, -2);
+    role = role.slice(1);
+    console.log(role);
+    //role_id = id
+
+    connection.query('SELECT * FROM role WHERE ?',
     [
         {
-            role_id: 7,
+            title: role,
+        }
+    ], (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        console.log(res[0].id);
+        newFunction(res, firstName, lastName);
+    })
+
+const newFunction = (role, firstName, lastName) => {
+    connection.query('UPDATE employee SET ? WHERE ? AND ?',
+    [
+        {
+            role_id: role[0].id,
         },
         {
             last_name: lastName,
         },
+        {
+            first_name: firstName,
+        }
     ],
     (err, res) => {
         if (err) throw err;
         console.log(`${res.affectedRows} employee updated!\n`);
         start();
       }
-  
+    )}
 }
 
 connection.connect((err) => {
