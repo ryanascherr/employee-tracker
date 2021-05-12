@@ -89,7 +89,6 @@ const addRole = () => {
             message: "What is the department id of the role?"
         }
     ]).then((answer) => {
-        console.log(answer)
         connection.query('INSERT INTO role SET ?',
         {
             title: answer.title,
@@ -127,7 +126,6 @@ const addEmployee = () => {
             message: "What is the manager id of the employee?"
         }
     ]).then((answer) => {
-        console.log(answer)
         connection.query('INSERT INTO employee SET ?',
         {
             first_name: answer.first_name,
@@ -175,7 +173,6 @@ const chooseEmployee = () => {
             let fullName = res[i].first_name + " " + res[i].last_name;
             arrayOfNames.push(fullName);
             employeeID = res[i].id;
-            console.log(employeeID);
         }
         inquirer.prompt([
             {
@@ -212,22 +209,17 @@ const chooseRole = (name) => {
                 choices: arrayOfRoles, 
             },
         ]).then((answer) => {
-            updateEmployee(answer, firstName, lastName);
+            getRoleId(answer, firstName, lastName);
         })
     })
 }
 
-const updateEmployee = (role, firstName, lastName) => {
+const getRoleId = (role, firstName, lastName) => {
     role = JSON.stringify(role);
-    console.log(role);
     role = role.split(':');
-    console.log(role);
     role = role[1];
-    console.log(role);
     role = role.slice(0, -2);
     role = role.slice(1);
-    console.log(role);
-    //role_id = id
 
     connection.query('SELECT * FROM role WHERE ?',
     [
@@ -237,11 +229,11 @@ const updateEmployee = (role, firstName, lastName) => {
     ], (err, res) => {
         if (err) throw err;
         console.table(res);
-        console.log(res[0].id);
-        newFunction(res, firstName, lastName);
+        updateRoleId(res, firstName, lastName);
     })
+}
 
-const newFunction = (role, firstName, lastName) => {
+const updateRoleId = (role, firstName, lastName) => {
     connection.query('UPDATE employee SET ? WHERE ? AND ?',
     [
         {
@@ -259,8 +251,8 @@ const newFunction = (role, firstName, lastName) => {
         console.log(`${res.affectedRows} employee updated!\n`);
         start();
       }
-    )}
-}
+)}
+
 
 connection.connect((err) => {
     if (err) throw err;
