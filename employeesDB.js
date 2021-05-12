@@ -160,7 +160,7 @@ const viewRoles = () => {
 }
 
 const viewEmployees = () => {
-    connection.query('SELECT * FROM employee', (err, res) => {
+    connection.query('SELECT first_name, last_name, title, salary FROM employee INNER JOIN role ON employee.role_id = role.id', (err, res) => {
         if (err) throw err;
         console.table(res);
         start();

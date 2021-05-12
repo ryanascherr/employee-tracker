@@ -29,3 +29,14 @@ CREATE TABLE employee (
     manager_id INT(10) NOT NULL,
     PRIMARY KEY (id)
 );
+
+-- Get title and department based on ID
+
+SELECT title, department_name
+FROM role
+INNER JOIN department ON role.department_id = department.id;
+
+
+SELECT first_name, last_name, salary
+FROM employee
+INNER JOIN role ON employee.role_id = role.id;
